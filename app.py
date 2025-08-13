@@ -28,11 +28,20 @@ tabs = st.tabs([
 # -------------------- Home Tab --------------------
 with tabs[0]:
     st.title("Titanic Survival Prediction App")
-    st.write("""
-    Welcome! This app allows you to explore the Titanic dataset, visualize key features,
-    and predict passenger survival using a trained machine learning model.
+    st.markdown("""
+    ## 🚢 Welcome to the Titanic Survival Prediction App!  
+
+    Step aboard and explore the story of the Titanic through **data**.  
+    This interactive app lets you:  
+    - 📊 **Explore** the Titanic dataset to uncover fascinating patterns.  
+    - 🎨 **Visualize** important features with beautiful and insightful charts.  
+    - 🤖 **Predict** survival chances using a trained machine learning model.  
+
+    Navigate through the tabs above to begin your journey — from exploring raw data  
+    to making predictions about who might have survived the Titanic disaster.  
+
+    💡 *Tip: The more you explore, the more you'll discover!*  
     """)
-    st.markdown("Use the tabs above to navigate through different sections of the app.")
     st.image("data/dataset-card.jpg", caption="The Titanic", use_container_width=True)
 
 # -------------------- Data Exploration Tab --------------------
@@ -198,3 +207,4 @@ with tabs[4]:
     if not comparison_df.empty:
         st.dataframe(comparison_df.sort_values(by="Test Accuracy", ascending=False))
         st.bar_chart(comparison_df.set_index("Model")["Test Accuracy"])
+
