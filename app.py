@@ -13,22 +13,31 @@ with open("model.pkl", "rb") as file:
 
 df = pd.read_csv("processed_titanic.csv")
 
-# -------------------- Sidebar Navigation --------------------
-st.sidebar.title("Navigation")
-section = st.sidebar.selectbox("Go to", ["Home", "Data Exploration", "Visualizations", "Model Prediction", "Model Performance"])
+# -------------------- Page Config --------------------
+st.set_page_config(page_title="Titanic Survival Prediction App", layout="wide")
 
-# -------------------- Home --------------------
-if section == "Home":
-    st.title("🚢 Titanic Survival Prediction App")
+# -------------------- Tabs Navigation --------------------
+tabs = st.tabs([
+    "Home", 
+    "Data Exploration", 
+    "Visualizations", 
+    "Model Prediction", 
+    "Model Performance"
+])
+
+# -------------------- Home Tab --------------------
+with tabs[0]:
+    st.title("Titanic Survival Prediction App")
     st.write("""
     Welcome! This app allows you to explore the Titanic dataset, visualize key features,
     and predict passenger survival using a trained machine learning model.
     """)
-    st.markdown("Use the sidebar to navigate through different sections of the app.")
+    st.markdown("Use the tabs above to navigate through different sections of the app.")
+    st.image("data/dataset-card.jpg", caption="The Titanic", use_container_width=True)
 
-# -------------------- Data Exploration --------------------
-elif section == "Data Exploration":
-    st.header("🔍 Data Exploration")
+# -------------------- Data Exploration Tab --------------------
+with tabs[1]:
+    st.header(" Data Exploration")
 
     # Dataset overview
     st.subheader("Dataset Overview")
@@ -57,9 +66,9 @@ elif section == "Data Exploration":
     
     st.dataframe(filtered_df)
 
-# -------------------- Visualizations --------------------
-elif section == "Visualizations":
-    st.header("📊 Visualizations")
+# -------------------- Visualizations Tab --------------------
+with tabs[2]:
+    st.header(" Visualizations")
 
     # Scatter Plot
     st.subheader("Scatter Plot")
@@ -92,9 +101,9 @@ elif section == "Visualizations":
         sns.heatmap(corr, annot=True, cmap='coolwarm', ax=ax)
         st.pyplot(fig4)
 
-# -------------------- Model Prediction --------------------
-elif section == "Model Prediction":
-    st.header("🧮 Predict Passenger Survival")
+# -------------------- Model Prediction Tab --------------------
+with tabs[3]:
+    st.header(" Predict Passenger Survival")
     st.write("Enter passenger details below to predict survival.")
 
     # User input
@@ -111,7 +120,6 @@ elif section == "Model Prediction":
     Sex_male = 1 if Sex=="Male" else 0
     Embarked_Q = 1 if Embarked=="Q" else 0
     Embarked_S = 1 if Embarked=="S" else 0
-    Title_Master = 1 if Title=="Master" else 0
     Title_Miss = 1 if Title=="Miss" else 0
     Title_Mr = 1 if Title=="Mr" else 0
     Title_Mrs = 1 if Title=="Mrs" else 0
@@ -138,12 +146,10 @@ elif section == "Model Prediction":
             st.success(f"Prediction: {result}")
             st.info(f"Prediction Probability: {prediction_proba:.2f}")
 
-# -------------------- Model Performance --------------------
-elif section == "Model Performance":
-    st.header("Model Evaluation")
+# -------------------- Model Performance Tab --------------------
+with tabs[4]:
+    st.header(" Model Evaluation")
     st.write("This section shows your model's performance metrics and comparisons.")
-
-    from sklearn.metrics import accuracy_score, precision_score, recall_score, f1_score, confusion_matrix, ConfusionMatrixDisplay
 
     # Separate features and target
     X = df.drop(columns=['Survived'])
@@ -180,9 +186,8 @@ elif section == "Model Performance":
     disp.plot(ax=ax)
     st.pyplot(fig)
 
-    # -------------------- Model Comparison --------------------
+    # Model Comparison
     st.subheader("Model Comparison")
-
     try:
         with open("results.pkl", "rb") as f:
             comparison_df = pickle.load(f)
@@ -191,8 +196,5 @@ elif section == "Model Performance":
         comparison_df = pd.DataFrame()
 
     if not comparison_df.empty:
-        # Display table
         st.dataframe(comparison_df.sort_values(by="Test Accuracy", ascending=False))
-
-        # Bar chart for visual comparison
         st.bar_chart(comparison_df.set_index("Model")["Test Accuracy"])
