@@ -11,7 +11,7 @@ from sklearn.metrics import accuracy_score, precision_score, recall_score, f1_sc
 with open("model.pkl", "rb") as file:
     model = pickle.load(file)
 
-df = pd.read_csv("processed_titanic.csv")
+df = pd.read_csv("data/processed_titanic.csv")
 
 # -------------------- Page Config --------------------
 st.set_page_config(page_title="Titanic Survival Prediction App", layout="wide")
@@ -207,4 +207,5 @@ with tabs[4]:
     if not comparison_df.empty:
         st.dataframe(comparison_df.sort_values(by="Test Accuracy", ascending=False))
         st.bar_chart(comparison_df.set_index("Model")["Test Accuracy"])
+
 
